@@ -15,8 +15,8 @@ To run the application locally, follow these steps:
 
 
 ```bash
-git clone <repository_url>
-cd <repository_directory>
+git clone git@github.com:marcosantar93/ps-challenge.git
+cd ps-challenge
 npm install
 npm run start
 ```
