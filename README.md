@@ -1,5 +1,7 @@
 # 3D Scene Visualization Challenge 
 
+https://github.com/user-attachments/assets/4300f0d1-413d-4685-a224-aebf303485ee
+
 ## Live Demo
 
 You can view the live application at:
