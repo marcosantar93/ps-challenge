@@ -114,9 +114,7 @@ body {
   to { opacity: 0.4; transform: scale(1); }
 }
 
-.cuboid {
-  animation: cuboidFadeIn 0.5s ease-in-out;
-}
+
 :root {
   --background-color: #121212;
   --primary-color: #00CED1; 

@@ -18,12 +18,13 @@ export const Cuboid = ({
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
+  console.log({ cuboid });
+
   return (
     <mesh
       ref={meshRef}
       position={cuboid.position}
-      rotation={[0, cuboid.yaw, 0]}
-      className="cuboid"
+      rotation={[0, 0, cuboid.yaw]}
       {...props}
       onPointerOver={(e) => {
         e.stopPropagation();
