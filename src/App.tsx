@@ -17,11 +17,7 @@ export const App: React.FC = () => {
         style={{ background: "#121212" }}
       >
         <Suspense fallback={null}>
-          <Scene
-            currentFrame={currentFrame}
-            totalFrames={TOTAL_FRAMES}
-            controlsRef={controlsRef}
-          />
+          <Scene currentFrame={currentFrame} totalFrames={TOTAL_FRAMES} />
           <NavigationControls controlsRef={controlsRef} />
         </Suspense>
       </Canvas>

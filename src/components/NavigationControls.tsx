@@ -49,7 +49,15 @@ export const NavigationControls = ({
   };
 
   return (
-    <Html fullscreen>
+    <Html
+      style={{
+        position: "absolute",
+        top: -350,
+        right: -550,
+        color: "white",
+        userSelect: "none",
+      }}
+    >
       <div className="navigation-controls">
         <button onClick={() => moveCamera("up")} aria-label="Move Up">
           ▲
