@@ -14,7 +14,6 @@ interface SceneProps {
 
 export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
   const tooltipRef = useRef();
-  const [isFetching, setIsFetching] = useState(false);
   const [pointsPositions, setPointsPositions] = useState<Float32Array | null>(
     null
   );
@@ -68,9 +67,7 @@ export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
   }, [currentFrame]);
 
   const fetchFramesDataCallback = useCallback(async () => {
-    setIsFetching(true);
     await fetchFramesData(totalFrames);
-    setIsFetching(false);
   }, []);
 
   useEffect(() => {
@@ -131,10 +128,6 @@ export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
       }
     }
   }, [hoveredCuboidInfo]);
-
-  if (isFetching) {
-    return <Html center>Loading...</Html>;
-  }
 
   return (
     <>
