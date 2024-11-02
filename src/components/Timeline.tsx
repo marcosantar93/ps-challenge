@@ -31,7 +31,7 @@ export const Timeline = ({
             return 0;
           }
         });
-      }, 1000 / playbackSpeed); 
+      }, 1000 / playbackSpeed);
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -76,7 +76,7 @@ export const Timeline = ({
           disabled={currentFrame === 0}
           aria-label="Previous Frame"
         >
-          &#9664;
+          ⏮
         </button>
         <button
           onClick={handlePlayPause}
@@ -89,7 +89,7 @@ export const Timeline = ({
           disabled={currentFrame === totalFrames - 1}
           aria-label="Next Frame"
         >
-          &#9654;
+          ⏭
         </button>
       </div>
 
