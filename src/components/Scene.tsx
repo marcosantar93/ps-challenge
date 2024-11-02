@@ -13,7 +13,7 @@ interface SceneProps {
 }
 
 export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
-  const tooltipRef = useRef();
+  const tooltipRef = useRef(null);
   const [pointsPositions, setPointsPositions] = useState<Float32Array | null>(
     null
   );
@@ -108,12 +108,16 @@ export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
     if (tooltipRef.current) {
       const tooltip = tooltipRef.current as HTMLDivElement;
       const rect = tooltip.getBoundingClientRect();
+
       const x = rect.x + rect.width / 2;
       const y = rect.y + rect.height / 2;
+      let transformX = "0";
+      let transformY = "0";
 
       if (x > window.innerWidth / 2) {
         tooltip.style.left = "auto";
         tooltip.style.right = "0";
+        transformX = "-100%";
       } else {
         tooltip.style.left = "0";
         tooltip.style.right = "auto";
@@ -122,10 +126,12 @@ export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
       if (y > window.innerHeight / 2) {
         tooltip.style.top = "auto";
         tooltip.style.bottom = "0";
+        transformY = "-100%";
       } else {
         tooltip.style.top = "0";
         tooltip.style.bottom = "auto";
       }
+      tooltip.style.transform = `translate(${transformX}, ${transformY})`;
     }
   }, [hoveredCuboidInfo]);
 
@@ -158,7 +164,7 @@ export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
 
       {hoveredCuboidInfo && (
         <Html position={hoveredCuboidInfo.position}>
-          <div ref={tooltipRef.current} className="cuboid-tooltip">
+          <div ref={tooltipRef} className="cuboid-tooltip">
             <pre>{JSON.stringify(hoveredCuboidInfo.info, null, 2)}</pre>
           </div>
         </Html>
