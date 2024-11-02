@@ -13,7 +13,7 @@ interface SceneProps {
 }
 
 export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
-  const tooltipRef = useRef(null);
+  const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [pointsPositions, setPointsPositions] = useState<Float32Array | null>(
     null
   );
