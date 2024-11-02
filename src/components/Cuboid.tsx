@@ -23,6 +23,7 @@ export const Cuboid = ({
       ref={meshRef}
       position={cuboid.position}
       rotation={[0, cuboid.yaw, 0]}
+      className="cuboid"
       {...props}
       onPointerOver={(e) => {
         e.stopPropagation();
@@ -37,16 +38,17 @@ export const Cuboid = ({
     >
       <boxGeometry args={cuboid.dimensions} />
       <meshStandardMaterial
-        color={hovered ? "yellow" : "orange"}
+        color={hovered ? "#FFD700" : "#00CED1"}
         transparent
-        opacity={0.5}
+        opacity={0.4}
+        roughness={0.5}
       />
       <lineSegments>
         <edgesGeometry
           attach="geometry"
           args={[new THREE.BoxGeometry(...cuboid.dimensions)]}
         />
-        <lineBasicMaterial color="black" />
+        <lineBasicMaterial color="#FFFFFF" />
       </lineSegments>
     </mesh>
   );

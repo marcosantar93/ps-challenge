@@ -1,16 +1,20 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { OrbitControls, Html } from "@react-three/drei";
 import * as THREE from "three";
-import { fetchFrameData } from "../data/fetchData";
+import { fetchFramesData, getFrameData } from "../data/fetchData";
 import { CuboidData } from "../types/FrameData";
 import { Cuboid } from "./Cuboid";
 import { CuboidType } from "../types/Cuboid";
+import { useMedia } from "react-use";
 
 interface SceneProps {
   currentFrame: number;
+  totalFrames: number;
 }
 
-export const Scene = ({ currentFrame }: SceneProps) => {
+export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
+  const tooltipRef = useRef();
+  const [isFetching, setIsFetching] = useState(false);
   const [pointsPositions, setPointsPositions] = useState<Float32Array | null>(
     null
   );
@@ -21,7 +25,7 @@ export const Scene = ({ currentFrame }: SceneProps) => {
   );
 
   useEffect(() => {
-    fetchFrameData(currentFrame).then((data) => {
+    getFrameData(currentFrame).then((data) => {
       const points = data.points as number[][];
       const positions = new Float32Array(points.length * 3);
       const colors = new Float32Array(points.length * 3);
@@ -63,6 +67,19 @@ export const Scene = ({ currentFrame }: SceneProps) => {
     });
   }, [currentFrame]);
 
+  const fetchFramesDataCallback = useCallback(async () => {
+    setIsFetching(true);
+    await fetchFramesData(totalFrames);
+    setIsFetching(false);
+  }, []);
+
+  useEffect(() => {
+    fetchFramesDataCallback();
+  }, []);
+
+  const isMobile = useMedia("(max-width: 600px)");
+  const pointSize = isMobile ? 0.05 : 0.1;
+
   const getColorByHeight = (
     z: number,
     minZ: number,
@@ -89,6 +106,36 @@ export const Scene = ({ currentFrame }: SceneProps) => {
     }
   }, [pointsPositions, pointsColors]);
 
+  // Depending of the tooltip position, transform it so that it renders within the screen
+  useEffect(() => {
+    if (tooltipRef.current) {
+      const tooltip = tooltipRef.current as HTMLDivElement;
+      const rect = tooltip.getBoundingClientRect();
+      const x = rect.x + rect.width / 2;
+      const y = rect.y + rect.height / 2;
+
+      if (x > window.innerWidth / 2) {
+        tooltip.style.left = "auto";
+        tooltip.style.right = "0";
+      } else {
+        tooltip.style.left = "0";
+        tooltip.style.right = "auto";
+      }
+
+      if (y > window.innerHeight / 2) {
+        tooltip.style.top = "auto";
+        tooltip.style.bottom = "0";
+      } else {
+        tooltip.style.top = "0";
+        tooltip.style.bottom = "auto";
+      }
+    }
+  }, [hoveredCuboidInfo]);
+
+  if (isFetching) {
+    return <Html center>Loading...</Html>;
+  }
+
   return (
     <>
       <OrbitControls enablePan enableZoom enableRotate />
@@ -99,9 +146,9 @@ export const Scene = ({ currentFrame }: SceneProps) => {
         <points geometry={pointsGeometry}>
           <pointsMaterial
             vertexColors
-            size={0.05}
+            size={pointSize}
             transparent
-            opacity={0.8}
+            opacity={1}
             depthWrite={false}
           />
         </points>
@@ -118,18 +165,7 @@ export const Scene = ({ currentFrame }: SceneProps) => {
 
       {hoveredCuboidInfo && (
         <Html position={hoveredCuboidInfo.position}>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              padding: 10,
-              backgroundColor: "rgba(255, 255, 255, 0.5)",
-              color: "black",
-              border: "1px solid black",
-              borderRadius: 5,
-            }}
-          >
+          <div ref={tooltipRef.current} className="cuboid-tooltip">
             <pre>{JSON.stringify(hoveredCuboidInfo.info, null, 2)}</pre>
           </div>
         </Html>
