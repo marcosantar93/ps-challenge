@@ -1,4 +1,27 @@
-# 3D Scene Visualization Challenge
+# 3D Scene Visualization Challenge 
+
+## Live Demo
+
+You can view the live application at:
+
+- **URL**: [http://scale-challenge-021124.s3-website-us-east-1.amazonaws.com/](http://scale-challenge-021124.s3-website-us-east-1.amazonaws.com/)
+
+**Note:** The demo supports **HTTP** only, not **HTTPS**. Please ensure your browser allows loading of non-secure content if you are accessing from a secure site.
+
+
+## Setup
+
+To run the application locally, follow these steps:
+
+
+```bash
+git clone <repository_url>
+cd <repository_directory>
+npm install
+npm run start
+```
+
+# Original Read Me
 
 Welcome to our technical challenge! In this exercise, you are tasked to create a 3D visualization tool using the dependencies provided in the `package.json`. Your application will render a 3D scene given a JSON input containing information about points and cuboids.
 
