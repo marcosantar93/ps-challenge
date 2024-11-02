@@ -18,8 +18,6 @@ export const Cuboid = ({
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
-  console.log({ cuboid });
-
   return (
     <mesh
       ref={meshRef}
