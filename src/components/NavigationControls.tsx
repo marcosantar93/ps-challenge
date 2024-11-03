@@ -34,7 +34,7 @@ export const NavigationControls = ({
         camera.position.z += moveDistance;
         break;
       case "reset":
-        camera.position.set(0, -100, -100);
+        camera.position.set(0, -100, 100);
         camera.lookAt(0, 0, 0);
         break;
       default:
@@ -78,10 +78,10 @@ export const NavigationControls = ({
         </button>
         <div className="depth-buttons">
           <button onClick={() => moveCamera("forward")} aria-label="Zoom In">
-            -
+            +
           </button>
           <button onClick={() => moveCamera("backward")} aria-label="Zoom Out">
-            +
+            -
           </button>
         </div>
       </div>

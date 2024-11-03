@@ -13,7 +13,7 @@ export const App: React.FC = () => {
   return (
     <>
       <Canvas
-        camera={{ position: [0, -100, -100], fov: 30 }}
+        camera={{ position: [0, -100, 100], fov: 30 }}
         style={{ background: "#121212" }}
       >
         <Suspense fallback={null}>
