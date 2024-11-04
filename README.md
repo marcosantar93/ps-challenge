@@ -23,6 +23,43 @@ npm install
 npm run start
 ```
 
+## Usage
+
+The application provides an interactive 3D visualization of a scene with points and cuboids. Below are the instructions on how to use the various features:
+
+### Keyboard Shortcuts
+
+- Space: Play/pause frame reproduction.
+- Left Arrow (←): Move to the previous frame.
+- Right Arrow (→): Move to the next frame.
+
+### Mouse Controls
+
+Orbit Controls:
+- Rotate: Click and drag the left mouse button.
+- Pan: Click and drag the right mouse button or hold Shift and drag with the left mouse button.
+- Zoom: Use the mouse wheel scroll up/down.
+
+Timeline Controls:
+- Play/Pause Button (► / ❚❚): Start or pause the automatic frame playback.
+- Previous Frame Button (⏮): Go to the previous frame.
+- Next Frame Button (⏭): Go to the next frame.
+- Frame Slider: Drag the slider to navigate to a specific frame.
+- Speed Control: Adjust the playback speed using the slider. The speed ranges from 0.5x to 10x.
+
+Navigation Controls
+
+Located at the top-right corner of the screen:
+- Arrow Buttons (▲, ▼, ◀, ▶): Move the camera up, down, left, or right.
+- Zoom Buttons (+, -): Zoom the camera in or out.
+- Reset Button (⟳): Reset the camera to the default position.
+
+Interacting with Cuboids
+- Hover Over Cuboids: Move your cursor over a cuboid to highlight it.
+- Highlight: The cuboid will change color to indicate it is selected.
+- Tooltip: A tooltip will appear displaying detailed information about the cuboid, such as its dimensions, position, and other properties.
+- Note: Only one cuboid can be highlighted at a time.
+
 # Original Read Me
 
 Welcome to our technical challenge! In this exercise, you are tasked to create a 3D visualization tool using the dependencies provided in the `package.json`. Your application will render a 3D scene given a JSON input containing information about points and cuboids.
