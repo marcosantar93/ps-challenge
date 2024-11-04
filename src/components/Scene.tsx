@@ -9,9 +9,14 @@ import { useThree } from "@react-three/fiber";
 interface SceneProps {
   currentFrame: number;
   framesData: FrameData[];
+  cameraPosition: THREE.Vector3;
 }
 
-export const Scene = ({ currentFrame, framesData }: SceneProps) => {
+export const Scene = ({
+  currentFrame,
+  framesData,
+  cameraPosition,
+}: SceneProps) => {
   const [pointsPositions, setPointsPositions] = useState<Float32Array | null>(
     null
   );
@@ -20,6 +25,10 @@ export const Scene = ({ currentFrame, framesData }: SceneProps) => {
   const [hoveredCuboidId, setHoveredCuboidId] = useState<string | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const { camera, size } = useThree();
+
+  useEffect(() => {
+    camera.position.copy(cameraPosition);
+  }, [cameraPosition]);
 
   useEffect(() => {
     const data = framesData[currentFrame];

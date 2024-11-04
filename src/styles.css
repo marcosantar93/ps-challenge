@@ -4,6 +4,7 @@ body {
   background-color: #121212; 
   color: #ffffff;
   font-family: Arial, sans-serif;
+  touch-action: manipulation;
 }
 
 .timeline-container {
@@ -36,20 +37,22 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 10px 5px;
+  scale: 0.8;
 }
 
 .timeline-mobile button {
-  font-size: 16px;
+  font-size: 60px;
   margin: 5px 0;
 }
 
 .timeline-mobile .frame-slider {
   width: 100%;
-  margin: 10px 0;
+  height: 20px;
+  margin: 20px 0;
 }
 
 .timeline-mobile .frame-indicator {
-  font-size: 14px;
+  font-size: 40px;
   text-align: center;
   margin: 5px 0;
 }
@@ -57,7 +60,9 @@ body {
 .timeline-mobile .speed-control {
   flex-direction: row;
   align-items: center;
+  width: 50%;
   margin-top: 10px;
+  font-size: 40px;
 }
 
 .timeline-mobile .speed-control label {

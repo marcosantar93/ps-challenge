@@ -12,7 +12,7 @@ export const Timeline = ({
   totalFrames,
   onFrameChange,
 }: TimelineProps) => {
-  const isMobile = useMedia("(max-width: 600px)");
+  const isMobile = useMedia("(max-width: 1000px)");
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(5);
   const intervalRef = useRef<number | null>(null);

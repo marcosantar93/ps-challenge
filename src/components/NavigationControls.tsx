@@ -1,51 +1,62 @@
-import { useThree } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
+import { Vector3 } from "three";
+import { INITIAL_CAMERA_POSITION } from "../App";
+import { useMedia } from "react-use";
 
-export const NavigationControls = () => {
-  const { camera } = useThree();
+export const NavigationControls = ({
+  currentPosition,
+  updatePosition,
+}: {
+  currentPosition: Vector3;
+  updatePosition: (position: Vector3) => void;
+}) => {
+  const isMobile = useMedia("(max-width: 1000px)");
 
   const moveCamera = (direction: string) => {
     const moveDistance = 10;
+    const position = currentPosition.clone();
 
     switch (direction) {
       case "up":
-        camera.position.y += moveDistance;
+        position.y += moveDistance;
         break;
       case "down":
-        camera.position.y -= moveDistance;
+        position.y -= moveDistance;
         break;
       case "left":
-        camera.position.x -= moveDistance;
+        position.x -= moveDistance;
         break;
       case "right":
-        camera.position.x += moveDistance;
+        position.x += moveDistance;
         break;
       case "forward":
-        camera.position.z -= moveDistance;
+        position.z -= moveDistance;
         break;
       case "backward":
-        camera.position.z += moveDistance;
+        position.z += moveDistance;
         break;
       case "reset":
-        camera.position.set(0, -100, 100);
-        camera.lookAt(0, 0, 0);
+        position.copy(INITIAL_CAMERA_POSITION);
         break;
+
       default:
         break;
     }
 
-    camera.updateProjectionMatrix();
+    updatePosition(position);
   };
 
   return (
-    <Html
+    <div
       style={{
-        position: "fixed",
-        top: -350,
-        right: -700,
+        position: "absolute",
+        top: 0,
+        right: 0,
         color: "white",
         userSelect: "none",
         pointerEvents: "none",
+        zIndex: 2,
+        transform: isMobile ? "scale(2) translate(100%, 100%)" : "scale(1)",
+        touchAction: "none",
       }}
     >
       <div
@@ -80,6 +91,6 @@ export const NavigationControls = () => {
           </button>
         </div>
       </div>
-    </Html>
+    </div>
   );
 };

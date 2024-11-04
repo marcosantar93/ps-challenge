@@ -6,8 +6,10 @@ import { NavigationControls } from "./components/NavigationControls";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFramesData } from "./data/fetchData";
 import { FrameData } from "./types/FrameData";
+import { Vector3 } from "three";
 
 const TOTAL_FRAMES = 50;
+export const INITIAL_CAMERA_POSITION = new Vector3(0, -100, 100);
 
 export const App: React.FC = () => {
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -23,6 +25,10 @@ export const App: React.FC = () => {
     staleTime: Infinity,
   });
 
+  const [cameraPosition, setCameraPosition] = useState<Vector3>(
+    INITIAL_CAMERA_POSITION
+  );
+
   if (isLoading) {
     return (
       <div className="loading-indicator">Loading frames, please wait...</div>
@@ -35,15 +41,24 @@ export const App: React.FC = () => {
 
   return (
     <>
+      <NavigationControls
+        currentPosition={cameraPosition}
+        updatePosition={(position: Vector3) => {
+          setCameraPosition(position);
+        }}
+      />
       <Canvas
-        camera={{ position: [0, -100, 100], fov: 30 }}
+        camera={{ position: INITIAL_CAMERA_POSITION, fov: 30 }}
         style={{ background: "#121212" }}
       >
         <Suspense fallback={null}>
           {framesData && (
-            <Scene currentFrame={currentFrame} framesData={framesData} />
+            <Scene
+              currentFrame={currentFrame}
+              framesData={framesData}
+              cameraPosition={cameraPosition}
+            />
           )}
-          <NavigationControls />
         </Suspense>
       </Canvas>
       <Timeline
