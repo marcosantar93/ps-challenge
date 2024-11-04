@@ -1,14 +1,7 @@
-import React from "react";
 import { useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 
-interface NavigationControlsProps {
-  controlsRef: React.RefObject<any>;
-}
-
-export const NavigationControls = ({
-  controlsRef,
-}: NavigationControlsProps) => {
+export const NavigationControls = () => {
   const { camera } = useThree();
 
   const moveCamera = (direction: string) => {
@@ -42,10 +35,6 @@ export const NavigationControls = ({
     }
 
     camera.updateProjectionMatrix();
-
-    if (controlsRef.current) {
-      controlsRef.current.update();
-    }
   };
 
   return (

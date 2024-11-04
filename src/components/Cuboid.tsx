@@ -18,44 +18,11 @@ export const Cuboid = ({
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
-  const materials = [
-    new THREE.MeshStandardMaterial({
-      color: hovered ? "#FFD700" : "#00CED1",
-      transparent: true,
-      opacity: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({
-      color: hovered ? "#FFD700" : "#00CED1",
-      transparent: true,
-      opacity: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({
-      color: hovered ? "#FFD700" : "#00CED1",
-      transparent: true,
-      opacity: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({
-      color: hovered ? "#FFD700" : "#00CED1",
-      transparent: true,
-      opacity: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({
-      color: "#FF0000",
-      transparent: true,
-      opacity: 0.4,
-    }),
-    new THREE.MeshStandardMaterial({
-      color: hovered ? "#FFD700" : "#00CED1",
-      transparent: true,
-      opacity: 0.4,
-    }),
-  ];
-
   return (
     <mesh
       ref={meshRef}
       position={cuboid.position}
-      rotation={[0, cuboid.yaw, 0]}
+      rotation={[0, 0, cuboid.yaw]}
       {...props}
       onPointerOver={(e) => {
         e.stopPropagation();
@@ -69,7 +36,12 @@ export const Cuboid = ({
       }}
     >
       <boxGeometry args={cuboid.dimensions} />
-      <primitive object={materials} attach="material" />
+      <meshStandardMaterial
+        color={hovered ? "#FFD700" : "#00CED1"}
+        transparent
+        opacity={0.4}
+        roughness={0.5}
+      />
       <lineSegments>
         <edgesGeometry
           attach="geometry"
