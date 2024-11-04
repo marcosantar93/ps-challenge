@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { FrameData } from "../types/FrameData";
 import { Cuboid } from "./Cuboid";
 import { CuboidType } from "../types/Cuboid";
+import { useThree } from "@react-three/fiber";
 
 interface SceneProps {
   currentFrame: number;
@@ -17,6 +18,8 @@ export const Scene = ({ currentFrame, framesData }: SceneProps) => {
   const [pointsColors, setPointsColors] = useState<Float32Array | null>(null);
   const [cuboids, setCuboids] = useState<CuboidType[]>([]);
   const [hoveredCuboidId, setHoveredCuboidId] = useState<string | null>(null);
+  const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const { camera, size } = useThree();
 
   useEffect(() => {
     const data = framesData[currentFrame];
@@ -64,7 +67,7 @@ export const Scene = ({ currentFrame, framesData }: SceneProps) => {
     }
   }, [framesData, currentFrame]);
 
-  const pointSize = 0.1; // Adjust as needed
+  const pointSize = 0.1;
 
   const getColorByHeight = (
     z: number,
@@ -95,6 +98,26 @@ export const Scene = ({ currentFrame, framesData }: SceneProps) => {
   const hoveredCuboidInfo =
     cuboids.find((cuboid) => cuboid.info.uuid === hoveredCuboidId) || null;
 
+  const getTooltipPosition = (position: [number, number, number]): string => {
+    const vector = new THREE.Vector3(...position);
+    vector.project(camera);
+
+    const x = (vector.x * 0.5 + 0.5) * size.width;
+    const y = (-vector.y * 0.5 + 0.5) * size.height;
+
+    const threshold = 150;
+    const isLeft = x < threshold;
+    const isRight = x > size.width - threshold;
+    const isTop = y < threshold;
+    const isBottom = y > size.height - threshold;
+
+    if (isRight) return "left";
+    if (isLeft) return "right";
+    if (isBottom) return "top";
+    if (isTop) return "bottom";
+    return "top";
+  };
+
   return (
     <>
       <OrbitControls enablePan enableZoom enableRotate />
@@ -123,8 +146,15 @@ export const Scene = ({ currentFrame, framesData }: SceneProps) => {
       ))}
 
       {hoveredCuboidInfo && (
-        <Html position={hoveredCuboidInfo.position}>
-          <div className="cuboid-tooltip">
+        <Html
+          position={hoveredCuboidInfo.position}
+          style={{ pointerEvents: "none" }}
+        >
+          <div
+            ref={tooltipRef}
+            className="cuboid-tooltip"
+            data-position={getTooltipPosition(hoveredCuboidInfo.position)}
+          >
             <pre>{JSON.stringify(hoveredCuboidInfo.info, null, 2)}</pre>
           </div>
         </Html>
