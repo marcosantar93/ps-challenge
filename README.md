@@ -8,9 +8,7 @@ https://github.com/user-attachments/assets/487bc52b-89bf-4325-ba84-9af42eeefccb
 
 You can view the live application at:
 
-- **URL**: [http://scale-challenge-021124.s3-website-us-east-1.amazonaws.com/](http://scale-challenge-021124.s3-website-us-east-1.amazonaws.com/)
-
-**Note:** The demo supports **HTTP** only, not **HTTPS**. Please ensure your browser allows loading of non-secure content if you are accessing from a secure site.
+- **URL**: https://d156hdblfh2no1.cloudfront.net/
 
 
 ## Setup
