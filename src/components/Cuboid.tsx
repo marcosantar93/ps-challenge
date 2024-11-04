@@ -1,22 +1,23 @@
-import React, { useRef, useState } from "react";
+import { useRef } from "react";
 import { MeshProps } from "@react-three/fiber";
 import * as THREE from "three";
 import { CuboidType } from "../types/Cuboid";
 
 interface CuboidProps extends MeshProps {
   cuboid: CuboidType;
-  onHover: () => void;
-  onUnHover: () => void;
+  hoveredCuboidId: string | null;
+  setHoveredCuboidId: (id: string | null) => void;
 }
 
 export const Cuboid = ({
   cuboid,
-  onHover,
-  onUnHover,
+  hoveredCuboidId,
+  setHoveredCuboidId,
   ...props
 }: CuboidProps) => {
   const meshRef = useRef<THREE.Mesh>(null);
-  const [hovered, setHovered] = useState(false);
+
+  const hovered = cuboid.info.uuid === hoveredCuboidId;
 
   return (
     <mesh
@@ -26,13 +27,11 @@ export const Cuboid = ({
       {...props}
       onPointerOver={(e) => {
         e.stopPropagation();
-        setHovered(true);
-        onHover();
+        setHoveredCuboidId(cuboid.info.uuid);
       }}
       onPointerOut={(e) => {
         e.stopPropagation();
-        setHovered(false);
-        onUnHover();
+        setHoveredCuboidId(null);
       }}
     >
       <boxGeometry args={cuboid.dimensions} />

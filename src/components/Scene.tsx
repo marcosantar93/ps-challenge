@@ -1,30 +1,26 @@
-import { useEffect, useState, useMemo, useRef, useCallback } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { OrbitControls, Html } from "@react-three/drei";
 import * as THREE from "three";
-import { fetchFramesData, getFrameData } from "../data/fetchData";
-import { CuboidData } from "../types/FrameData";
+import { FrameData } from "../types/FrameData";
 import { Cuboid } from "./Cuboid";
 import { CuboidType } from "../types/Cuboid";
-import { useMedia } from "react-use";
 
 interface SceneProps {
   currentFrame: number;
-  totalFrames: number;
+  framesData: FrameData[];
 }
 
-export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
-  const tooltipRef = useRef<HTMLDivElement | null>(null);
+export const Scene = ({ currentFrame, framesData }: SceneProps) => {
   const [pointsPositions, setPointsPositions] = useState<Float32Array | null>(
     null
   );
   const [pointsColors, setPointsColors] = useState<Float32Array | null>(null);
   const [cuboids, setCuboids] = useState<CuboidType[]>([]);
-  const [hoveredCuboidInfo, setHoveredCuboidInfo] = useState<CuboidType | null>(
-    null
-  );
+  const [hoveredCuboidId, setHoveredCuboidId] = useState<string | null>(null);
 
   useEffect(() => {
-    getFrameData(currentFrame).then((data) => {
+    const data = framesData[currentFrame];
+    if (data) {
       const points = data.points as number[][];
       const positions = new Float32Array(points.length * 3);
       const colors = new Float32Array(points.length * 3);
@@ -39,16 +35,18 @@ export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
         if (z > maxZ) maxZ = z;
       });
 
+      const colorInstance = new THREE.Color();
+
       points.forEach((point, i) => {
         const z = point[2];
-        const color = getColorByHeight(z, minZ, maxZ);
+        const color = getColorByHeight(z, minZ, maxZ, colorInstance);
         colors.set(color, i * 3);
       });
 
       setPointsPositions(positions);
       setPointsColors(colors);
 
-      const cuboidsData = data.cuboids.map((cuboid: CuboidData) => ({
+      const cuboidsData = data.cuboids.map((cuboid) => ({
         position: [
           cuboid["position.x"],
           cuboid["position.y"],
@@ -63,29 +61,20 @@ export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
         info: cuboid,
       }));
       setCuboids(cuboidsData);
-    });
-  }, [currentFrame]);
+    }
+  }, [framesData, currentFrame]);
 
-  const fetchFramesDataCallback = useCallback(async () => {
-    await fetchFramesData(totalFrames);
-  }, []);
-
-  useEffect(() => {
-    fetchFramesDataCallback();
-  }, []);
-
-  const isMobile = useMedia("(max-width: 600px)");
-  const pointSize = isMobile ? 0.05 : 0.1;
+  const pointSize = 0.1; // Adjust as needed
 
   const getColorByHeight = (
     z: number,
     minZ: number,
-    maxZ: number
+    maxZ: number,
+    colorInstance: THREE.Color
   ): [number, number, number] => {
     const normalizedZ = (z - minZ) / (maxZ - minZ);
-    const color = new THREE.Color();
-    color.setHSL((1 - normalizedZ) * 0.7, 1, 0.5);
-    return [color.r, color.g, color.b];
+    colorInstance.setHSL((1 - normalizedZ) * 0.7, 1, 0.5);
+    return [colorInstance.r, colorInstance.g, colorInstance.b];
   };
 
   const pointsGeometry = useMemo(() => {
@@ -103,37 +92,8 @@ export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
     }
   }, [pointsPositions, pointsColors]);
 
-  // Depending of the tooltip position, transform it so that it renders within the screen
-  useEffect(() => {
-    if (tooltipRef.current) {
-      const tooltip = tooltipRef.current as HTMLDivElement;
-      const rect = tooltip.getBoundingClientRect();
-
-      const x = rect.x + rect.width / 2;
-      const y = rect.y + rect.height / 2;
-      let transformX = "0";
-      let transformY = "0";
-
-      if (x > window.innerWidth / 2) {
-        tooltip.style.left = "auto";
-        tooltip.style.right = "0";
-        transformX = "-100%";
-      } else {
-        tooltip.style.left = "0";
-        tooltip.style.right = "auto";
-      }
-
-      if (y > window.innerHeight / 2) {
-        tooltip.style.top = "auto";
-        tooltip.style.bottom = "0";
-        transformY = "-100%";
-      } else {
-        tooltip.style.top = "0";
-        tooltip.style.bottom = "auto";
-      }
-      tooltip.style.transform = `translate(${transformX}, ${transformY})`;
-    }
-  }, [hoveredCuboidInfo]);
+  const hoveredCuboidInfo =
+    cuboids.find((cuboid) => cuboid.info.uuid === hoveredCuboidId) || null;
 
   return (
     <>
@@ -157,14 +117,14 @@ export const Scene = ({ currentFrame, totalFrames }: SceneProps) => {
         <Cuboid
           key={index}
           cuboid={cuboid}
-          onHover={() => setHoveredCuboidInfo(cuboid)}
-          onUnHover={() => setHoveredCuboidInfo(null)}
+          hoveredCuboidId={hoveredCuboidId}
+          setHoveredCuboidId={setHoveredCuboidId}
         />
       ))}
 
       {hoveredCuboidInfo && (
         <Html position={hoveredCuboidInfo.position}>
-          <div ref={tooltipRef} className="cuboid-tooltip">
+          <div className="cuboid-tooltip">
             <pre>{JSON.stringify(hoveredCuboidInfo.info, null, 2)}</pre>
           </div>
         </Html>
