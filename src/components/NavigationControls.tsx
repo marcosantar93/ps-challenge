@@ -40,14 +40,19 @@ export const NavigationControls = () => {
   return (
     <Html
       style={{
-        position: "absolute",
         top: -350,
-        right: -550,
+        right: -700,
         color: "white",
         userSelect: "none",
+        pointerEvents: "none",
       }}
     >
-      <div className="navigation-controls">
+      <div
+        className="navigation-controls"
+        style={{
+          pointerEvents: "auto",
+        }}
+      >
         <button onClick={() => moveCamera("up")} aria-label="Move Up">
           ▲
         </button>
