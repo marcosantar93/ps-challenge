@@ -40,6 +40,7 @@ export const NavigationControls = () => {
   return (
     <Html
       style={{
+        position: "fixed",
         top: -350,
         right: -700,
         color: "white",
