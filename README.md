@@ -1,9 +1,7 @@
 # 3D Scene Visualization Challenge 
 
 
-https://github.com/user-attachments/assets/6247c58b-b341-474c-b4e1-61020b7dfcaf
-
-
+https://github.com/user-attachments/assets/487bc52b-89bf-4325-ba84-9af42eeefccb
 
 
 ## Live Demo
